@@ -4,6 +4,7 @@ import com.example.demo.DemoApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 @RequestMapping(path = "api/v1/customer")
@@ -24,16 +25,11 @@ public class CustomerController {
 
     @GetMapping(path = "{customerId}")
     Customer getCustomer(@PathVariable("customerId") Long id){
-        return
-                customerService.getCustomers()
-                        .stream()
-                        .filter(customer -> customer.getId().equals(id))
-                        .findFirst()
-                        .orElseThrow(()->new IllegalStateException("Customer Not Found"));
+        return customerService.getCustomer(id);
     }
 
     @PostMapping
-    void createCustomer(@RequestBody Customer customer){
+    void createCustomer(@RequestBody @Valid Customer customer){
         System.out.println("POST REQUEST "+customer);
     }
 

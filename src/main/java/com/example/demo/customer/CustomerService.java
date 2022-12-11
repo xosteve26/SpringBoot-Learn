@@ -20,4 +20,12 @@ public class CustomerService {
         return customerRepo.getCustomer();
     }
 
+    Customer getCustomer(Long customerId){
+        return customerRepo.getCustomer()
+                .stream()
+                .filter(customer -> customer.getId().equals(customerId))
+                .findFirst()
+                .orElseThrow(()->new IllegalStateException("Customer with id "+ customerId+ " was not found"));
+    }
+
 }
