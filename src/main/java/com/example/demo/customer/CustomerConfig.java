@@ -18,13 +18,7 @@ public class CustomerConfig {
         };
     }
     @Bean
-    CustomerRepo customerRepo(){
-        if(useFakeCustomerRepo){
-            System.out.println("USE FAKE REPOSITORY");
-            return new CustomerFakeRepository();
-        }else{
-            System.out.println("USE PRODUCTION REPOSITORY");
-            return new CustomerRepository();
-        }
+    CustomerRepo customerRepo() {
+        return new CustomerFakeRepository();
     }
 }

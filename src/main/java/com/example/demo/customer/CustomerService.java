@@ -1,5 +1,8 @@
 package com.example.demo.customer;
 
+import com.example.demo.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -10,22 +13,26 @@ import java.util.List;
 
 @Service
 public class CustomerService {
-    private final CustomerRepo customerRepo;
+    private final static Logger LOGGER= LoggerFactory.getLogger(CustomerService.class);
+    private final CustomerRepository customerRepository;
     @Autowired
-    public CustomerService( CustomerRepo customerRepo) {
-        this.customerRepo = customerRepo;
+    public CustomerService( CustomerRepository customerRepo) {
+        this.customerRepository = customerRepo;
     }
 
     List<Customer> getCustomers(){
-        return customerRepo.getCustomer();
+        LOGGER.info("In getCustomer method");
+        return customerRepository.findAll();
     }
 
     Customer getCustomer(Long customerId){
-        return customerRepo.getCustomer()
-                .stream()
-                .filter(customer -> customer.getId().equals(customerId))
-                .findFirst()
-                .orElseThrow(()->new IllegalStateException("Customer with id "+ customerId+ " was not found"));
+        return customerRepository
+                .findById(customerId)
+                .orElseThrow(()->{
+                    NotFoundException notFoundException=new NotFoundException("Customer with ID "+customerId+" does not exist");
+                    LOGGER.error("Error in getting customer {} ",customerId, notFoundException);
+                    return notFoundException;
+                });
     }
 
 }

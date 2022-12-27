@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-@RequestMapping(path = "api/v1/customer")
+@RequestMapping(path = "api/v1/customers")
 @RestController
 public class CustomerController {
 
